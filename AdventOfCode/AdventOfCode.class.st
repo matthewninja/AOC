@@ -43,13 +43,6 @@ AdventOfCode class >> findNounVerb: originalProgram [
 
 { #category : #'as yet unclassified' }
 AdventOfCode class >> fuelRequirement2: mass [
-		"required := (self fuelRequirement: i)."
-		"get fuel required"
-		"check if > 0 additional fuel required"
-		"repeat for additional fuel"
-		"... if "
-		
-		"(self fuelRequirement: i)"
 	| required total |
 	required := self fuelRequirement: mass.
 	total := 0.

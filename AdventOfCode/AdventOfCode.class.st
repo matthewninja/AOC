@@ -42,10 +42,39 @@ AdventOfCode class >> findNounVerb: originalProgram [
 ]
 
 { #category : #'as yet unclassified' }
-AdventOfCode class >> fuelRequirement: mass [
-	"comment stating purpose of message"
+AdventOfCode class >> fuelRequirement2: mass [
+		"required := (self fuelRequirement: i)."
+		"get fuel required"
+		"check if > 0 additional fuel required"
+		"repeat for additional fuel"
+		"... if "
+		
+		"(self fuelRequirement: i)"
+	| required total |
+	required := self fuelRequirement: mass.
+	total := 0.
+	[ required >= 0 ] whileTrue: [ 
+		total := total + required.
+		required := self fuelRequirement: required.
+	].
+	
+	^ total.
+]
 
+{ #category : #'as yet unclassified' }
+AdventOfCode class >> fuelRequirement: mass [
 	^ mass // 3 - 2.
+]
+
+{ #category : #'as yet unclassified' }
+AdventOfCode class >> fuelRequirementTotal2: masses [
+	"Day 1 part 2"
+	| total |
+	total := 0.
+	masses do: [ :i | 
+		total := total + (self fuelRequirement2: i).
+	].
+	^ total.
 ]
 
 { #category : #'as yet unclassified' }

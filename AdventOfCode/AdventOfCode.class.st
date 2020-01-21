@@ -1,10 +1,13 @@
+"
+""Advent Of Code 2019""
+"
 Class {
 	#name : #AdventOfCode,
 	#superclass : #Object,
 	#category : #AdventOfCode
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> crossedWires: patha num: pathb [
 	"Need matrix big enough to accomodate both wires"
 	"Alternatively, we can have a matrix that grows to accomodate the wires"
@@ -23,7 +26,7 @@ AdventOfCode class >> crossedWires: patha num: pathb [
 	^ matrix.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> findNounVerb: originalProgram [
 	"finds the noun and verb"
 	| output program |
@@ -41,7 +44,7 @@ AdventOfCode class >> findNounVerb: originalProgram [
 	^ -1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> fuelRequirement2: mass [
 	| required total |
 	required := self fuelRequirement: mass.
@@ -54,12 +57,12 @@ AdventOfCode class >> fuelRequirement2: mass [
 	^ total.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> fuelRequirement: mass [
 	^ mass // 3 - 2.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> fuelRequirementTotal2: masses [
 	"Day 1 part 2"
 	| total |
@@ -70,7 +73,7 @@ AdventOfCode class >> fuelRequirementTotal2: masses [
 	^ total.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> fuelRequirementTotal: masses [
 	"Day 1: fuel requirement with multiple inputs"
 	| total |
@@ -81,7 +84,7 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 	^ total.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> intcode: program [
 	"runs the intcode program"
 
@@ -112,7 +115,7 @@ AdventOfCode class >> intcode: program [
 	^ program.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> passwordCount: a end: b [
 	"Day 4: return viable password within range a-b inclusive"
 	| total |
@@ -126,7 +129,7 @@ AdventOfCode class >> passwordCount: a end: b [
 	^ a + b.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tools }
 AdventOfCode class >> validPassword: password [
 	"Valid passwords meet the following criteria:"
 	"It is a six-digit number.

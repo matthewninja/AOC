@@ -116,6 +116,19 @@ AdventOfCode class >> intcode: program [
 ]
 
 { #category : #tools }
+AdventOfCode class >> passwordCount2: a end: b [
+	"Day 4: return viable password within range a-b inclusive"
+	| total |
+	total := 0.
+	a to: b do: [ :i |
+		(self validPassword2: i) ifTrue: [ 
+			total := total + 1.
+			].	
+	].
+	^ total.
+]
+
+{ #category : #tools }
 AdventOfCode class >> passwordCount: a end: b [
 	"Day 4: return viable password within range a-b inclusive"
 	| total |
@@ -126,6 +139,45 @@ AdventOfCode class >> passwordCount: a end: b [
 			].	
 	].
 	^ total.
+]
+
+{ #category : #tools }
+AdventOfCode class >> validPassword2: password [
+	| priorDigit hasAdjacent adjacencyCounter |
+	"Valid passwords meet the following criteria:"
+	"It is a six-digit number."
+	(password decimalDigitLength ~= 6) ifTrue: [ ^ false ].
+	"The value is within the range given in your puzzle input. This can be taken for granted in this context"
+	"(at least) Two adjacent digits are the same (like 22 in 122345)."
+	hasAdjacent := false.
+	adjacencyCounter := 0.
+	"Going from left to right, the digits never decrease; they only ever increase or stay the same (like 111123 or 135679)."
+	"Or: going right to left, digits never increase."
+	priorDigit := password digitAt: 1 base: 10.
+	2 to: 6 do: [ :i |
+		((password digitAt: i base: 10) > priorDigit) ifTrue: [ ^ false ]. "check that digits increase left to right"
+		
+		((password digitAt: i base: 10) = priorDigit) ifTrue: [ 
+			adjacencyCounter := adjacencyCounter + 1.
+		] ifFalse: [
+			(adjacencyCounter = 1) ifTrue: [ hasAdjacent := true ].
+			adjacencyCounter := 0.
+		].
+		priorDigit := password digitAt: i base: 10.
+	].
+	(adjacencyCounter = 1) ifTrue: [ hasAdjacent := true ].
+	^ hasAdjacent.
+	
+	"For part 2, we're simply going to keep a counter for adjacencies. If reset to 0 while 1, hasAdjacent:= true."
+	"If reset while > 2, do nothing"
+	"An Elf just remembered one more important detail: the two adjacent matching digits 
+	are not part of a larger group of matching digits.
+
+	Given this additional criterion, but still ignoring the range rule, the following are now true:
+
+	112233 meets these criteria because the digits never decrease and all repeated digits are exactly two digits long.
+	123444 no longer meets the criteria (the repeated 44 is part of a larger group of 444).
+	111122 meets the criteria (even though 1 is repeated more than twice, it still contains a double 22)."
 ]
 
 { #category : #tools }

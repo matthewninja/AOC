@@ -123,19 +123,27 @@ AdventOfCode class >> passwordCount: a end: b [
 	a to: b do: [ :i |
 		(self validPassword: i) ifTrue: [ 
 			total := total + 1.
-			^ -10. "temporary for testing."
 			].	
 	].
-	^ a + b.
+	^ total.
 ]
 
 { #category : #tools }
 AdventOfCode class >> validPassword: password [
+	| priorDigit hasAdjacent |
 	"Valid passwords meet the following criteria:"
-	"It is a six-digit number.
-	The value is within the range given in your puzzle input.
-	Two adjacent digits are the same (like 22 in 122345).
-	Going from left to right, the digits never decrease; they only ever increase or stay the same (like 111123 or 135679)."
-
-	^ true.
+	"It is a six-digit number."
+	(password decimalDigitLength ~= 6) ifTrue: [ ^ false ].
+	"The value is within the range given in your puzzle input. This can be taken for granted in this context"
+	"(at least) Two adjacent digits are the same (like 22 in 122345)."
+	hasAdjacent := false.
+	"Going from left to right, the digits never decrease; they only ever increase or stay the same (like 111123 or 135679)."
+	"Or: going right to left, digits never increase."
+	priorDigit := password digitAt: 1 base: 10.
+	2 to: 6 do: [ :i |
+		((password digitAt: i base: 10) > priorDigit) ifTrue: [ ^ false ].
+		((password digitAt: i base: 10) = priorDigit) ifTrue: [ hasAdjacent := true ].
+		priorDigit := password digitAt: i base: 10.
+	].
+	^ hasAdjacent.
 ]

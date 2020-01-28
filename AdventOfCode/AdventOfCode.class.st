@@ -118,8 +118,19 @@ AdventOfCode class >> intcode3: program index: index input: input [
 ]
 
 { #category : #intcode }
-AdventOfCode class >> intcode4: program index: index [
-	Transcript show: (program at: (program at: index + 1) + 1);cr.
+AdventOfCode class >> intcode3: program index: index instruction: instruction input: input [
+
+	program at: (program at: index + 1) + 1 put: input.
+	^ 2.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode4: program index: index instruction: instruction [
+	"parameter modes"
+	
+	| x |
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	Transcript show: x;cr.
 	^ 2.
 ]
 
@@ -131,33 +142,50 @@ AdventOfCode class >> intcode5: program index: index instruction: instruction [
 	| x y |
 	
 	x := self intcodeParams: instruction arg: 1 program: program index: index.
-	
+	"Transcript show: 'opcode 5, x: ';show: x; show:'. next two: '; show: x; show: ', ';show: (program at: index + 2);cr."
 	x ~= 0 ifTrue: [
-		y := program at: index + 2.
-		^ (y - index + 1)
+		y := self intcodeParams: instruction arg: 2 program: program index: index.
+		"Transcript show:'index: ';show: index;show:', y: ';show: y;show:', increment: ';show:(y - index);cr."
+		^ ((y+1) - index)
 		].
 	^ 3.
 ]
 
 { #category : #intcode }
 AdventOfCode class >> intcode6: program index: index instruction: instruction [
-	"Opcode 5 is jump-if-true: if the first parameter is non-zero, 
-	it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing."
 		
 	| x y |
 	
 	x := self intcodeParams: instruction arg: 1 program: program index: index.
-	
-	x = 0 ifTrue: [
-		y := program at: index + 2.
-		^ (y - index + 1)
+	x == 0 ifTrue: [
+		y := self intcodeParams: instruction arg: 2 program: program index: index.
+		^ ((y+1) - index)
 		].
 	^ 3.
 ]
 
 { #category : #intcode }
 AdventOfCode class >> intcode7: program index: index instruction: instruction [
+	
+	| x y |
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	y := self intcodeParams: instruction arg: 2 program: program index: index.
+	x < y 
+		ifTrue: [program at: (program at: index + 3) + 1 put: 1.]
+		ifFalse: [program at: (program at: index + 3) + 1 put: 0.].
+	^ 4.
+]
 
+{ #category : #intcode }
+AdventOfCode class >> intcode8: program index: index instruction: instruction [
+	
+	| x y |
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	y := self intcodeParams: instruction arg: 2 program: program index: index.
+	x = y 
+		ifTrue: [program at: (program at: index + 3) + 1 put: 1.]
+		ifFalse: [program at: (program at: index + 3) + 1 put: 0.].
+	^ 4.
 ]
 
 { #category : #intcode }
@@ -172,7 +200,8 @@ AdventOfCode class >> intcodeMachine: program input: input [
 		whileTrue: [
 			instruction := program at: index.
 			opcode := (instruction digitAt: 1 base: 10) + (10 * (instruction digitAt: 2 base: 10)).
-			Transcript show: 'opcode:'; show: opcode; cr.
+			Transcript show: 'opcode:'; show: opcode; show: ', index: '; show: index;cr.
+			"opcode = 94 ifTrue:[Halt now]."
 			opcode = 99
 				ifTrue: [ programLen :=  -1 ]
 				ifFalse: [ increment := 4 ].
@@ -183,12 +212,17 @@ AdventOfCode class >> intcodeMachine: program input: input [
 			opcode = 3
 				ifTrue: [increment := self intcode3: program index: index input: input].
 			opcode = 4
-				ifTrue: [increment := self intcode4: program index: index].
+				ifTrue: [increment := self intcode4: program index: index instruction: instruction.].
 			opcode = 5
 				ifTrue: [increment := self intcode5: program index: index instruction: instruction].
 			opcode = 6
 				ifTrue: [increment := self intcode6: program index: index instruction: instruction].
-			index := index + increment ].
+			opcode = 7
+				ifTrue: [increment := self intcode7: program index: index instruction: instruction].
+			opcode = 8
+				ifTrue: [increment := self intcode8: program index: index instruction: instruction].
+			index := index + increment.
+			].
 	^ program
 ]
 
@@ -226,10 +260,10 @@ AdventOfCode class >> intcodeOriginal: program [
 { #category : #intcode }
 AdventOfCode class >> intcodeParams: instruction arg: arg program: program index: index [
 	"returns value for intcode instructions"
-	
+	"Transcript show: (instruction digitAt: 2 + arg base: 10);cr."
 	(instruction digitAt: 2 + arg base: 10) = 1
 						ifTrue: [ ^ (program at: index + arg ).]
-						ifFalse: [ ^ (program at: (program at: index + arg) + 1 )].
+						ifFalse: ["Transcript show: 'false!'; cr. "^ (program at: (program at: index + arg) + 1 )].
 
 	
 ]

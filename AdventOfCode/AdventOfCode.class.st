@@ -151,13 +151,13 @@ AdventOfCode class >> intcodeMachine: program [
 		].
 		"intcode 3: place input (1 param)"
 		(( program at: index) == 3) ifTrue: [ 
-			input := -1. "temporary input"
+			input := -123. "temporary input"
 			program at: (program at: index + 1) + 1 put: input.
 			increment := 2.
 		].
 		"intcode 4: output param value (1 param)"
 		(( program at: index) == 4) ifTrue: [ 
-			Transcript show: (program at: index + 1); cr.
+			Transcript show: (program at: (program at: index + 1) + 1); cr.
 			increment := 2.
 		].
 		index := index + increment.

@@ -119,14 +119,13 @@ AdventOfCode class >> intcode: program [
 AdventOfCode class >> intcodeMachine: program [
 	"runs the intcode program"
 
-	| programLen index x y increment |
+	| programLen index x y increment input |
 	programLen := program size.
 	index := 1.
 	increment := 4.
-	Transcript show: 0; cr.
 	[ index <= programLen ] 
 	whileTrue: [ 
-		"intcode 99 - end (no params)"
+		"intcode 99: end (no params)"
 		((program at: index) = 99) ifTrue: [ 
 			programLen := -1.
 		] ifFalse: [
@@ -141,7 +140,7 @@ AdventOfCode class >> intcodeMachine: program [
 			put: (program at: x) + (program at: y).
 			increment := 4.
 		].
-		"intcode 2 - multiplication (3 params)"
+		"intcode 2: multiplication (3 params)"
 		(( program at: index) == 2) ifTrue: [ 
 			x := (program at: (index + 1)) + 1.
 			y := (program at: (index + 2)) + 1.
@@ -150,13 +149,16 @@ AdventOfCode class >> intcodeMachine: program [
 			put: (program at: x) * (program at: y).
 			increment := 4.
 		].
-		"intcode 3 - place input (1 param)"
+		"intcode 3: place input (1 param)"
 		(( program at: index) == 3) ifTrue: [ 
-			
+			input := -1. "temporary input"
+			program at: (program at: index + 1) + 1 put: input.
+			increment := 2.
 		].
-		"intcode 4 - output param value (1 param)"
+		"intcode 4: output param value (1 param)"
 		(( program at: index) == 4) ifTrue: [ 
-			
+			Transcript show: (program at: index + 1); cr.
+			increment := 2.
 		].
 		index := index + increment.
 	].

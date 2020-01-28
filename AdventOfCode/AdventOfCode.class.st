@@ -116,6 +116,54 @@ AdventOfCode class >> intcode: program [
 ]
 
 { #category : #tools }
+AdventOfCode class >> intcodeMachine: program [
+	"runs the intcode program"
+
+	| programLen index x y increment |
+	programLen := program size.
+	index := 1.
+	increment := 4.
+	Transcript show: 0; cr.
+	[ index <= programLen ] 
+	whileTrue: [ 
+		"intcode 99 - end (no params)"
+		((program at: index) = 99) ifTrue: [ 
+			programLen := -1.
+		] ifFalse: [
+			increment := 4.
+		].
+		"intcode 1 - addition (3 params)"
+		(( program at: index) == 1) ifTrue: [ 
+			x := (program at: (index + 1)) + 1.
+			y := (program at: (index + 2)) + 1.
+			program 
+			at: (program at: (index + 3)) + 1 
+			put: (program at: x) + (program at: y).
+			increment := 4.
+		].
+		"intcode 2 - multiplication (3 params)"
+		(( program at: index) == 2) ifTrue: [ 
+			x := (program at: (index + 1)) + 1.
+			y := (program at: (index + 2)) + 1.
+			program 
+			at: (program at: (index + 3)) + 1 
+			put: (program at: x) * (program at: y).
+			increment := 4.
+		].
+		"intcode 3 - place input (1 param)"
+		(( program at: index) == 3) ifTrue: [ 
+			
+		].
+		"intcode 4 - output param value (1 param)"
+		(( program at: index) == 4) ifTrue: [ 
+			
+		].
+		index := index + increment.
+	].
+	^ program.
+]
+
+{ #category : #tools }
 AdventOfCode class >> passwordCount2: a end: b [
 	"Day 4: return viable password within range a-b inclusive"
 	| total |

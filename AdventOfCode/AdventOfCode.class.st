@@ -88,7 +88,7 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 AdventOfCode class >> intcode1: x [
 	"deal with intcode 1 (addition)"
 
-	^ 1.
+	^ #(1 2 3).
 ]
 
 { #category : #intcode }
@@ -102,29 +102,22 @@ AdventOfCode class >> intcodeMachine: program [
 	[ index <= programLen ]
 		whileTrue: [
 			instruction := program at: index.
-			opcode := (instruction digitAt: 1 base: 10)
-				+ (10 * (instruction digitAt: 2 base: 10)).
+			opcode := (instruction digitAt: 1 base: 10) + (10 * (instruction digitAt: 2 base: 10)).
 			Transcript show: 'opcode:'; show: opcode; cr.
 			opcode = 99
 				ifTrue: [ programLen :=  -1 ]
 				ifFalse: [ increment := 4 ].
 			opcode = 1
-				ifTrue: [ x := (instruction digitAt: 3 base: 10) = 1
-						ifTrue: [ program at: index + 1 ]
-						ifFalse: [ program at: (program at: index + 1) + 1 ].
-					y := (instruction digitAt: 4 base: 10) = 1
-						ifTrue: [ program at: index + 2 ]
-						ifFalse: [ program at: (program at: index + 2) + 1 ].
+				ifTrue: [
+					x := self intcodeParams: instruction arg: 1 program: program index: index.
+					y := self intcodeParams: instruction arg: 2 program: program index: index.
 					z := x + y.
 					program at: (program at: index + 3) + 1 put: z.
 					increment := 4 ].
 			opcode = 2
-				ifTrue: [ x := (instruction digitAt: 3 base: 10) = 1
-						ifTrue: [ program at: index + 1 ]
-						ifFalse: [ program at: (program at: index + 1) + 1 ].
-					y := (instruction digitAt: 4 base: 10) = 1
-						ifTrue: [ program at: index + 2 ]
-						ifFalse: [ program at: (program at: index + 2) + 1 ].
+				ifTrue: [ 
+					x := self intcodeParams: instruction arg: 1 program: program index: index.
+					y := self intcodeParams: instruction arg: 2 program: program index: index.
 					z := x * y.
 					program at: (program at: index + 3) + 1 put: z.
 					increment := 4 ].
@@ -170,6 +163,17 @@ AdventOfCode class >> intcodeOriginal: program [
 		index := index + 4.
 	].
 	^ program.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcodeParams: instruction arg: arg program: program index: index [
+	"returns value for intcode instructions"
+	
+	(instruction digitAt: 2 + arg base: 10) = 1
+						ifTrue: [ ^ (program at: index + arg ).]
+						ifFalse: [ ^ (program at: (program at: index + arg) + 1 )].
+
+	
 ]
 
 { #category : #tools }

@@ -85,17 +85,86 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 ]
 
 { #category : #intcode }
-AdventOfCode class >> intcode1: x [
+AdventOfCode class >> intcode1: program index: index instruction: instruction [
 	"deal with intcode 1 (addition)"
+	
+	| x y z |
 
-	^ #(1 2 3).
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	y := self intcodeParams: instruction arg: 2 program: program index: index.
+	z := x + y.
+	program at: (program at: index + 3) + 1 put: z.
+	^ 4.
 ]
 
 { #category : #intcode }
-AdventOfCode class >> intcodeMachine: program [
+AdventOfCode class >> intcode2: program index: index instruction: instruction [
+	"deal with intcode 1 (addition)"
+	
+	| x y z |
+
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	y := self intcodeParams: instruction arg: 2 program: program index: index.
+	z := x * y.
+	program at: (program at: index + 3) + 1 put: z.
+	^ 4.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode3: program index: index input: input [
+
+	program at: (program at: index + 1) + 1 put: input.
+	^ 2.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode4: program index: index [
+	Transcript show: (program at: (program at: index + 1) + 1);cr.
+	^ 2.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode5: program index: index instruction: instruction [
+	"Opcode 5 is jump-if-true: if the first parameter is non-zero, 
+	it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing."
+		
+	| x y |
+	
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	
+	x ~= 0 ifTrue: [
+		y := program at: index + 2.
+		^ (y - index + 1)
+		].
+	^ 3.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode6: program index: index instruction: instruction [
+	"Opcode 5 is jump-if-true: if the first parameter is non-zero, 
+	it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing."
+		
+	| x y |
+	
+	x := self intcodeParams: instruction arg: 1 program: program index: index.
+	
+	x = 0 ifTrue: [
+		y := program at: index + 2.
+		^ (y - index + 1)
+		].
+	^ 3.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcode7: program index: index instruction: instruction [
+
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcodeMachine: program input: input [
 	"runs the intcode program"
 
-	| programLen index x y z increment input instruction opcode |
+	| programLen index increment instruction opcode |
 	programLen := program size.
 	index := 1.
 	increment := 4.
@@ -108,28 +177,17 @@ AdventOfCode class >> intcodeMachine: program [
 				ifTrue: [ programLen :=  -1 ]
 				ifFalse: [ increment := 4 ].
 			opcode = 1
-				ifTrue: [
-					x := self intcodeParams: instruction arg: 1 program: program index: index.
-					y := self intcodeParams: instruction arg: 2 program: program index: index.
-					z := x + y.
-					program at: (program at: index + 3) + 1 put: z.
-					increment := 4 ].
+				ifTrue: [increment :=self intcode1: program index: index instruction: instruction].
 			opcode = 2
-				ifTrue: [ 
-					x := self intcodeParams: instruction arg: 1 program: program index: index.
-					y := self intcodeParams: instruction arg: 2 program: program index: index.
-					z := x * y.
-					program at: (program at: index + 3) + 1 put: z.
-					increment := 4 ].
+				ifTrue: [increment := self intcode2: program index: index instruction: instruction].
 			opcode = 3
-				ifTrue: [ input := 1.
-					program at: (program at: index + 1) + 1 put: input.
-					increment := 2 ].
+				ifTrue: [increment := self intcode3: program index: index input: input].
 			opcode = 4
-				ifTrue: [ Transcript
-						show: (program at: (program at: index + 1) + 1);
-						cr.
-					increment := 2 ].
+				ifTrue: [increment := self intcode4: program index: index].
+			opcode = 5
+				ifTrue: [increment := self intcode5: program index: index instruction: instruction].
+			opcode = 6
+				ifTrue: [increment := self intcode6: program index: index instruction: instruction].
 			index := index + increment ].
 	^ program
 ]

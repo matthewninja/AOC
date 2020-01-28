@@ -35,7 +35,7 @@ AdventOfCode class >> findNounVerb: originalProgram [
 		program := originalProgram copy.
 		program at: 2 put: a.
 		program at: 3 put: b. " temp. will put b"
-		output := (self intcode: program) at: 1.
+		output := (self intcodeOriginal: program) at: 1.
 		(output == 19690720) ifTrue: [ 
 			^ b.
 			 ].
@@ -84,8 +84,65 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 	^ total.
 ]
 
-{ #category : #tools }
-AdventOfCode class >> intcode: program [
+{ #category : #intcode }
+AdventOfCode class >> intcode1: x [
+	"deal with intcode 1 (addition)"
+
+	^ 1.
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcodeMachine: program [
+	"runs the intcode program"
+
+	| programLen index x y z increment input instruction opcode |
+	programLen := program size.
+	index := 1.
+	increment := 4.
+	[ index <= programLen ]
+		whileTrue: [
+			instruction := program at: index.
+			opcode := (instruction digitAt: 1 base: 10)
+				+ (10 * (instruction digitAt: 2 base: 10)).
+			Transcript show: 'opcode:'; show: opcode; cr.
+			opcode = 99
+				ifTrue: [ programLen :=  -1 ]
+				ifFalse: [ increment := 4 ].
+			opcode = 1
+				ifTrue: [ x := (instruction digitAt: 3 base: 10) = 1
+						ifTrue: [ program at: index + 1 ]
+						ifFalse: [ program at: (program at: index + 1) + 1 ].
+					y := (instruction digitAt: 4 base: 10) = 1
+						ifTrue: [ program at: index + 2 ]
+						ifFalse: [ program at: (program at: index + 2) + 1 ].
+					z := x + y.
+					program at: (program at: index + 3) + 1 put: z.
+					increment := 4 ].
+			opcode = 2
+				ifTrue: [ x := (instruction digitAt: 3 base: 10) = 1
+						ifTrue: [ program at: index + 1 ]
+						ifFalse: [ program at: (program at: index + 1) + 1 ].
+					y := (instruction digitAt: 4 base: 10) = 1
+						ifTrue: [ program at: index + 2 ]
+						ifFalse: [ program at: (program at: index + 2) + 1 ].
+					z := x * y.
+					program at: (program at: index + 3) + 1 put: z.
+					increment := 4 ].
+			opcode = 3
+				ifTrue: [ input := 1.
+					program at: (program at: index + 1) + 1 put: input.
+					increment := 2 ].
+			opcode = 4
+				ifTrue: [ Transcript
+						show: (program at: (program at: index + 1) + 1);
+						cr.
+					increment := 2 ].
+			index := index + increment ].
+	^ program
+]
+
+{ #category : #intcode }
+AdventOfCode class >> intcodeOriginal: program [
 	"runs the intcode program"
 
 	| programLen index x y |
@@ -113,65 +170,6 @@ AdventOfCode class >> intcode: program [
 		index := index + 4.
 	].
 	^ program.
-]
-
-{ #category : #tools }
-AdventOfCode class >> intcodeMachine: program [
-	"runs the intcode program"
-
-	| programLen index x y z increment input instruction opcode |
-	programLen := program size.
-	index := 1.
-	increment := 4.
-	[ index <= programLen ]
-		whileTrue: [ "priorDigit := password digitAt: 1 base: 10."
-			instruction := program at: index.
-			opcode := (instruction digitAt: 1 base: 10)
-				+ (10 * (instruction digitAt: 2 base: 10)).
-			Transcript show: 'opcode: '.
-			Transcript
-				show: opcode;
-				cr.
-			"intcode 99: end (no params)"
-			opcode = 99
-				ifTrue: [ programLen := -1 ]
-				ifFalse: [ increment := 4 ].
-			"intcode 1 - addition (3 params)"
-			opcode = 1
-				ifTrue: [ "check parameter mode for each."
-					x := (instruction digitAt: 3 base: 10) = 1
-						ifTrue: [ program at: index + 1 ]
-						ifFalse: [ program at: (program at: index + 1) + 1 ].
-					y := (instruction digitAt: 4 base: 10) = 1
-						ifTrue: [ program at: index + 2 ]
-						ifFalse: [ program at: (program at: index + 2) + 1 ].
-					z := x + y.
-					program at: (program at: index + 3) + 1 put: z.
-					increment := 4 ].
-			"intcode 2: multiplication (3 params)"
-			opcode = 2
-				ifTrue: [ x := (instruction digitAt: 3 base: 10) = 1
-						ifTrue: [ program at: index + 1 ]
-						ifFalse: [ program at: (program at: index + 1) + 1 ].
-					y := (instruction digitAt: 4 base: 10) = 1
-						ifTrue: [ program at: index + 2 ]
-						ifFalse: [ program at: (program at: index + 2) + 1 ].
-					z := x * y.
-					program at: (program at: index + 3) + 1 put: z.
-					increment := 4 ].
-			"intcode 3: place input (1 param)"
-			opcode = 3
-				ifTrue: [ input := 1.	"temporary input"
-					program at: (program at: index + 1) + 1 put: input.
-					increment := 2 ].
-			"intcode 4: output param value (1 param)"
-			opcode = 4
-				ifTrue: [ Transcript
-						show: (program at: (program at: index + 1) + 1);
-						cr.
-					increment := 2 ].
-			index := index + increment ].
-	^ program
 ]
 
 { #category : #tools }

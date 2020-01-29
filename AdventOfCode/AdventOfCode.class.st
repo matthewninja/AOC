@@ -7,6 +7,15 @@ Class {
 	#category : #AdventOfCode
 }
 
+{ #category : #day6 }
+AdventOfCode class >> calculateOrbits: map [
+	"return number of direct and indirect orbits"
+	
+	| tree | 
+	tree := CTNaryTree new.
+	^ 1.
+]
+
 { #category : #tools }
 AdventOfCode class >> crossedWires: patha num: pathb [
 	"Need matrix big enough to accomodate both wires"

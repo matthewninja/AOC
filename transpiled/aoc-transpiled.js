@@ -1464,7 +1464,7 @@ c$(function pj_terminate(){var $_self_$=this;(function(){return $_self_$.pj_clos
 })
 Smalltalk.pj_registerDnuForAll_(["closeDefault","command:","connectDefaultToUrl:","connectToTag:","data","default","default:","eval:","exit","isClosed","logReceived:","logSent:","makeBlockClosureProxy:stopPropagation:","makeInspect","on:do:","reconnect","reload:","send:","timeout:for:"]);
 PjEvaluatorWebsocketDelegate.pj_initialize();
-(function(appClass,webSocketDelegateClass,url){return function(){$asNil$(appClass).pj_start();return $asNil$(webSocketDelegateClass).pj_connectDefaultToUrl_(url)}})(PjWebApplication,PjEvaluatorWebsocketDelegate,"ws://localhost:1075/javascript-bridge")();
+// (function(appClass,webSocketDelegateClass,url){return function(){$asNil$(appClass).pj_start();return $asNil$(webSocketDelegateClass).pj_connectDefaultToUrl_(url)}})(PjWebApplication,PjEvaluatorWebsocketDelegate,"ws://localhost:1075/javascript-bridge")();
 
 Object.pj_subclass_("AdventOfCode");
 AdventOfCode.$$def(function(i$,c$,cp$){

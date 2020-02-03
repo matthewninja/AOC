@@ -3,7 +3,7 @@
 "
 Class {
 	#name : #AdventOfCode,
-	#superclass : #Object,
+	#superclass : #PjNodeApplication,
 	#category : #AdventOfCode
 }
 
@@ -12,27 +12,8 @@ AdventOfCode class >> calculateOrbits: map [
 	"return number of direct and indirect orbits"
 	
 	| tree | 
-	tree := CTNaryTree new.
+	"tree := CTNaryTree new."
 	^ 1.
-]
-
-{ #category : #tools }
-AdventOfCode class >> crossedWires: patha num: pathb [
-	"Need matrix big enough to accomodate both wires"
-	"Alternatively, we can have a matrix that grows to accomodate the wires"
-	"One approach, we can go through the input and mark each spot that it crosses with an a or b"
-	"This would tell us where the wires intersect (because it would have both a and b)"
-	"Then, we can iterate through the matrix and calculate manhattan distance from origin, keeping a running minimum"
-	"The central port is arbitrary, so long as it's the same for both wires"
-	"Central port location is not at 0,0"
-	"maybe dynamic matrix stores origin"
-	"We'll deal with Manhattan Distance later (or first?)"
-	
-	"2D Array with changing size, use Array2DDynamic"
-	| matrix | 
-	matrix := Array2DDynamic zeros: 2. "Start with a 2x2 matrix"
-	""
-	^ matrix.
 ]
 
 { #category : #tools }

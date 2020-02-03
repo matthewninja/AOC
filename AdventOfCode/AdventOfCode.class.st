@@ -4,6 +4,9 @@
 Class {
 	#name : #AdventOfCode,
 	#superclass : #PjNodeApplication,
+	#classVars : [
+		'ClassVarExample'
+	],
 	#category : #AdventOfCode
 }
 
@@ -72,6 +75,12 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 		total := total + (self fuelRequirement: i).
 	].
 	^ total.
+]
+
+{ #category : #'class initialization' }
+AdventOfCode class >> initialize [
+	ClassVarExample := 20.
+
 ]
 
 { #category : #intcode }

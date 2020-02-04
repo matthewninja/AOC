@@ -4,11 +4,20 @@
 Class {
 	#name : #AdventOfCode,
 	#superclass : #PjNodeApplication,
-	#classVars : [
-		'ClassVarExample'
+	#instVars : [
+		'expressServer'
+	],
+	#pools : [
+		'ExpressPolyfill'
 	],
 	#category : #AdventOfCode
 }
+
+{ #category : #exporting }
+AdventOfCode class >> appJsFileName [
+	<pharoJsSkip>
+	^ 'server.js'
+]
 
 { #category : #day6 }
 AdventOfCode class >> calculateOrbits: map [
@@ -79,8 +88,6 @@ AdventOfCode class >> fuelRequirementTotal: masses [
 
 { #category : #'class initialization' }
 AdventOfCode class >> initialize [
-	ClassVarExample := 20.
-
 ]
 
 { #category : #intcode }
@@ -350,4 +357,10 @@ AdventOfCode class >> validPassword: password [
 		priorDigit := password digitAt: i base: 10.
 	].
 	^ hasAdjacent.
+]
+
+{ #category : #'as yet unclassified' }
+AdventOfCode >> startExpress [
+	| a |
+	a := ExpressServer createTransport: 'a'
 ]

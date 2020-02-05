@@ -10,12 +10,14 @@ Class {
 	#category : #AdventOfCode
 }
 
-{ #category : #'as yet unclassified' }
-ExpressPolyfill class >> createTransport: options [
-]
-
 { #category : #'pharojs globals' }
 ExpressPolyfill class >> nodePackageName [
 	<pharoJsSkip>
 	^ 'express'
+]
+
+{ #category : #polyfill }
+ExpressPolyfill class >> nodePolyfill: aStream [
+	<pharoJsSkip>
+	super nodePolyfill: aStream.
 ]

@@ -359,8 +359,16 @@ AdventOfCode class >> validPassword: password [
 	^ hasAdjacent.
 ]
 
-{ #category : #'as yet unclassified' }
-AdventOfCode >> startExpress [
-	| a |
-	a := ExpressServer createTransport: 'a'
+{ #category : #initialization }
+AdventOfCode >> initialize [
+]
+
+{ #category : #webapp }
+AdventOfCode >> start [
+	| app port | 
+	app := ExpressServer new.
+	port := 3000.
+	"should have method on ExpressServer to add a route"
+	app get: '/' foo: '(req, res) => res.send("pharojs express says hello")'.
+	^ app.
 ]

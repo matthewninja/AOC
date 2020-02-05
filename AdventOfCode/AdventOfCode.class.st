@@ -369,6 +369,6 @@ AdventOfCode >> start [
 	app := ExpressServer new.
 	port := 3000.
 	"should have method on ExpressServer to add a route"
-	app get: '/' foo: '(req, res) => res.send("pharojs express says hello")'.
+	app get: '/'callback: [ :req :res | res send: 'pharojs express hello' ].
 	^ app.
 ]

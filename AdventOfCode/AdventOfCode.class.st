@@ -359,16 +359,21 @@ AdventOfCode class >> validPassword: password [
 	^ hasAdjacent.
 ]
 
+{ #category : #'as yet unclassified' }
+AdventOfCode >> getRequest: path send: text [
+	expressServer get: path action: [ :req :res | res send: text ].
+]
+
 { #category : #initialization }
 AdventOfCode >> initialize [
 ]
 
 { #category : #webapp }
 AdventOfCode >> start [
-	| app port | 
-	app := ExpressServer new.
+	| port | 
+	expressServer := ExpressServer new.
 	port := 3000.
-	"should have method on ExpressServer to add a route"
-	app get: '/'callback: [ :req :res | res send: 'pharojs express hello' ].
-	^ app.
+	self getRequest: '/' send: 'hello world from pharojs-express!'.
+	"add code to listen"
+	^ expressServer.
 ]

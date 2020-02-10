@@ -368,12 +368,19 @@ AdventOfCode >> getRequest: path send: text [
 AdventOfCode >> initialize [
 ]
 
+{ #category : #'as yet unclassified' }
+AdventOfCode >> listen: port [
+	"app.listen(3000,() => console.log('listening!!'))"
+	"pj_log_('start executed')"
+	expressServer listen: port anon: [ PjCore log: 'listening on port ' + port ].
+	
+]
+
 { #category : #webapp }
 AdventOfCode >> start [
-	| port | 
 	expressServer := ExpressServer new.
-	port := 3000.
 	self getRequest: '/' send: 'hello world from pharojs-express!'.
 	"add code to listen"
+	self listen: 3000.
 	^ expressServer.
 ]

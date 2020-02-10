@@ -360,6 +360,14 @@ AdventOfCode class >> validPassword: password [
 ]
 
 { #category : #'as yet unclassified' }
+AdventOfCode >> getRequest: path json: text [
+	| a json |
+	a := PjClass new.
+	json := a newFromJsonString: text.
+	expressServer get: path action: [ :req :res | res json: json ].
+]
+
+{ #category : #'as yet unclassified' }
 AdventOfCode >> getRequest: path send: text [
 	expressServer get: path action: [ :req :res | res send: text ].
 ]
@@ -380,6 +388,7 @@ AdventOfCode >> listen: port [
 AdventOfCode >> start [
 	expressServer := ExpressServer new.
 	self getRequest: '/' send: 'hello world from pharojs-express!'.
+	self getRequest: '/json' json: '{ "name":'+'"John", "age":30, "city":"Toronto"}'.
 	"add code to listen"
 	self listen: 3000.
 	^ expressServer.

@@ -24,10 +24,10 @@ bridge evalBlock: [
 ].
 bridge stop.
 ```
-Append the new code to `index.js`. An example is provided in `transpiled/aoc-transpiled.js`
+Append the new code to `index.js`.
 
 ### Use the javascript version
-Copy the compiled `transpiled/aoc-transpiled.js` into a javascript interpreter (chrome console works fine).
+Copy the transpiled code into a javascript interpreter (chrome console works fine).
 
 ### Example usage in JS interpreter
 `AdventOfCode.pj_fuelRequirement_(100756)`
